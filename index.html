@@ -685,8 +685,8 @@
       <p class="hero-hashtag rev d3">#ElQueAbandonaNoTienePremio</p>
       <div class="hero-stats rev d4">
         <div class="hero-stat">
-          <div class="hero-stat-num">4</div>
-          <div class="hero-stat-label">Títulos</div>
+          <div class="hero-stat-num">1</div>
+          <div class="hero-stat-label">Título Mayor</div>
         </div>
         <div class="hero-stat">
           <div class="hero-stat-num">2024</div>
@@ -697,7 +697,7 @@
           <div class="hero-stat-label">Jugadores</div>
         </div>
         <div class="hero-stat">
-          <div class="hero-stat-num">Div C</div>
+          <div class="hero-stat-num">DIV B</div>
           <div class="hero-stat-label">División</div>
         </div>
       </div>
@@ -739,7 +739,7 @@
           <div class="dato-card"><div class="dato-label">Liga</div><div class="dato-value">Liga Pro Uruguay · División C</div></div>
           <div class="dato-card"><div class="dato-label">Campo</div><div class="dato-value">Complejo La Masia</div></div>
           <div class="dato-card"><div class="dato-label">Director Técnico</div><div class="dato-value">Lorenzo Berretta</div></div>
-          <div class="dato-card"><div class="dato-label">Palmarés</div><div class="dato-value">4 títulos en 2 temporadas</div></div>
+          <div class="dato-card"><div class="dato-label">Palmarés</div><div class="dato-value">Copa de Campeones 2026</div></div>
           <div class="dato-card"><div class="dato-label">Temporada actual</div><div class="dato-value">Apertura 2026 · En curso</div></div>
           <div class="dato-card"><div class="dato-label">Sponsors</div><div class="dato-value">Boutique Bordenave · Maypu Pinturas · Estancia Ibirapita · Haras San Lorenzo</div></div>
         </div>
@@ -754,36 +754,23 @@
       <h2 class="sec-title rev">Palmarés</h2>
       <div class="gold-bar rev"></div>
       <div class="palmares-grid">
-        <div class="titulo-card rev d1">
-          <span class="titulo-icon">🏆</span>
-          <div class="titulo-comp">Liga Pro · División C</div>
-          <div class="titulo-name">Campeones Clausura</div>
-          <div class="titulo-year">2025</div>
+
+        <!-- GRAN TÍTULO — ocupa toda la fila -->
+        <div class="titulo-card titulo-grande rev d1" style="grid-column:1/-1;padding:3rem 2rem;display:flex;flex-direction:column;align-items:center;">
+          <span class="titulo-icon" style="font-size:4rem;">🏆</span>
+          <div class="titulo-comp" style="font-size:1rem;margin-bottom:0.75rem;">Liga Pro Uruguay</div>
+          <div class="titulo-name" style="font-size:3rem;letter-spacing:0.06em;">Copa de Campeones</div>
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:6rem;color:rgba(201,168,76,0.18);line-height:1;margin-top:0.25rem;">2026</div>
         </div>
-        <div class="titulo-card rev d2">
-          <span class="titulo-icon">🥇</span>
-          <div class="titulo-comp">Liga Pro · División C</div>
-          <div class="titulo-name">Campeones Acumulado</div>
-          <div class="titulo-year">2025</div>
-        </div>
-        <div class="titulo-card rev d3">
-          <span class="titulo-icon">🥇</span>
-          <div class="titulo-comp">Serie 3 · Liga Pro</div>
-          <div class="titulo-name">Copa de Oro Div C</div>
-          <div class="titulo-year">2025</div>
-        </div>
-        <div class="titulo-card rev d4">
-          <span class="titulo-icon">🏆</span>
-          <div class="titulo-comp">Liga Pro Uruguay</div>
-          <div class="titulo-name">Copa de Campeones</div>
-          <div class="titulo-year">2026</div>
-        </div>
-        <div class="titulo-card rev d5">
+
+        <!-- Individual -->
+        <div class="titulo-card rev d2" style="grid-column:1/-1;">
           <span class="titulo-icon">🧤</span>
           <div class="titulo-comp">Clausura 2025 · Individual</div>
           <div class="titulo-name">Valla Menos Vencida</div>
           <div class="titulo-year" style="font-size:1.1rem;right:0.6rem;bottom:0.6rem;line-height:1.3;">Nacho<br>Pintos</div>
         </div>
+
       </div>
     </section>
   </div>
@@ -820,30 +807,19 @@
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td class="jornada">J1</td>
-              <td class="equipo-sensei">Sensei FC</td>
-              <td class="vs-tag">VS</td>
-              <td>Bolke FC</td>
-            </tr>
-            <tr>
-              <td class="jornada">J2</td>
-              <td class="equipo-sensei">Sensei FC</td>
-              <td class="vs-tag">VS</td>
-              <td>Caligrafía FC</td>
-            </tr>
-            <tr>
-              <td class="jornada">J3</td>
-              <td class="equipo-sensei">Sensei FC</td>
-              <td class="vs-tag">VS</td>
-              <td>Playaco FC</td>
-            </tr>
-            <tr>
-              <td class="jornada">J4</td>
-              <td class="equipo-sensei">Sensei FC</td>
-              <td class="vs-tag">VS</td>
-              <td>Pata de Palo FC</td>
-            </tr>
+            <tr><td class="jornada">F1</td><td class="equipo-sensei">Sensei FC</td><td class="vs-tag">VS</td><td>Bolke FC</td></tr>
+            <tr><td class="jornada">F2</td><td class="equipo-sensei">Sensei FC</td><td class="vs-tag">VS</td><td>Caligrafía</td></tr>
+            <tr><td class="jornada">F3</td><td class="equipo-sensei">Sensei FC</td><td class="vs-tag">VS</td><td>Playaco FC</td></tr>
+            <tr><td class="jornada">F4</td><td class="equipo-sensei">Sensei FC</td><td class="vs-tag">VS</td><td>Pata de Palo</td></tr>
+            <tr><td class="jornada">F5</td><td class="equipo-sensei">Sensei FC</td><td class="vs-tag">VS</td><td>Aston Birra</td></tr>
+            <tr><td class="jornada">F6</td><td class="equipo-sensei">Sensei FC</td><td class="vs-tag">VS</td><td>Cristal Palas FC</td></tr>
+            <tr><td class="jornada">F7</td><td class="equipo-sensei">Sensei FC</td><td class="vs-tag">VS</td><td>Doble Fibra</td></tr>
+            <tr><td class="jornada">F8</td><td class="equipo-sensei">Sensei FC</td><td class="vs-tag">VS</td><td>Fratelli FC</td></tr>
+            <tr><td class="jornada">F9</td><td class="equipo-sensei">Sensei FC</td><td class="vs-tag">VS</td><td>Bilardo FC</td></tr>
+            <tr><td class="jornada">F10</td><td class="equipo-sensei">Sensei FC</td><td class="vs-tag">VS</td><td>Desprolijo 3720</td></tr>
+            <tr><td class="jornada">F11</td><td class="equipo-sensei">Sensei FC</td><td class="vs-tag">VS</td><td>Barkai</td></tr>
+            <tr><td class="jornada">F12</td><td class="equipo-sensei">Sensei FC</td><td class="vs-tag">VS</td><td>CSD La Pavota</td></tr>
+            <tr><td class="jornada">F13</td><td class="equipo-sensei">Sensei FC</td><td class="vs-tag">VS</td><td>Falta Envido FC</td></tr>
           </tbody>
         </table>
       </div>
@@ -906,15 +882,8 @@
   <!-- ─────────── FOOTER ─────────── -->
   <footer>
     <div class="footer-inner">
-      <!-- Escudo SVG -->
-      <svg width="64" height="77" viewBox="0 0 200 240" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M100 8 L192 58 L192 162 L100 232 L8 162 L8 58 Z" fill="#0d3d26" stroke="#c9a84c" stroke-width="4"/>
-        <polygon points="100,18 104.9,32.5 120,32.5 108.5,41.2 112.4,55.7 100,47 87.6,55.7 91.5,41.2 80,32.5 95.1,32.5" fill="#c9a84c"/>
-        <text x="100" y="112" font-family="sans-serif" font-size="34" fill="#f5f0e8" text-anchor="middle" font-weight="900">SENSEI</text>
-        <text x="100" y="138" font-family="sans-serif" font-size="20" fill="#c9a84c" text-anchor="middle" letter-spacing="3">FC</text>
-        <path d="M65,156 Q80,168 100,163 Q120,168 135,156" stroke="#f5f0e8" stroke-width="2.8" fill="none" stroke-linecap="round"/>
-        <path d="M70,164 Q84,177 100,172 Q116,177 130,164" stroke="#f5f0e8" stroke-width="2.2" fill="none" stroke-linecap="round"/>
-      </svg>
+      <!-- Escudo real -->
+      <img src="imagenes/EscudoSensei-Bueno.png" alt="Escudo Sensei FC" style="width:110px;height:auto;margin-bottom:0.5rem;">
       <div class="footer-logo">SENSEI <span>FC</span></div>
       <div class="footer-lema">#ElQueAbandonaNoTienePremio</div>
       <a href="https://www.instagram.com/senseifc2024/" target="_blank" rel="noopener" class="footer-ig">
@@ -924,7 +893,7 @@
         @senseifc2024
       </a>
       <div class="footer-meta">
-        Fundado el 19 de febrero de 2024 &nbsp;·&nbsp; Liga Pro Uruguay &nbsp;·&nbsp; División C<br>
+        Fundado el 19 de febrero de 2024 &nbsp;·&nbsp; Liga Pro Uruguay &nbsp;·&nbsp; División B<br>
         "El ritual continúa" &nbsp;·&nbsp; Complejo La Masia
       </div>
     </div>
