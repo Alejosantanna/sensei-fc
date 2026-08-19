@@ -186,3 +186,5 @@ input:focus, select:focus, textarea:focus { outline: 2px solid var(--verde); bor
 }
 .aviso-error { background: #7a2020; }
 @media (min-width: 820px) { .aviso { bottom: 1.5rem; } }
+.fila-clicable { cursor: pointer; }
+.fila-clicable:hover { background: rgba(245, 240, 232, 0.04); }
