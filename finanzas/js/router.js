@@ -7,13 +7,15 @@ const VISTAS = {
   sponsors: () => import('./vistas/sponsors.js'),
   gastos: () => import('./vistas/gastos.js'),
   ajustes: () => import('./vistas/ajustes.js'),
+  jugador: () => import('./vistas/jugador.js'),
 };
 
 const contenedor = document.getElementById('vista');
 
 function vistaActual() {
-  const nombre = location.hash.replace('#', '');
-  return VISTAS[nombre] ? nombre : 'panel';
+  const [nombre, parametro] = location.hash.replace('#', '').split('/');
+  if (nombre === 'jugador' && parametro) return { nombre: 'jugador', parametro };
+  return { nombre: VISTAS[nombre] && nombre !== 'jugador' ? nombre : 'panel', parametro: null };
 }
 
 function marcarActiva(nombre) {
@@ -23,14 +25,14 @@ function marcarActiva(nombre) {
 }
 
 export async function dibujarVistaActual() {
-  const nombre = vistaActual();
-  marcarActiva(nombre);
+  const { nombre, parametro } = vistaActual();
+  marcarActiva(nombre === 'jugador' ? 'jugadores' : nombre);
   vaciar(contenedor);
   contenedor.append(elemento('p', { clase: 'vacio', texto: 'Cargando...' }));
   try {
     const modulo = await VISTAS[nombre]();
     vaciar(contenedor);
-    await modulo.default(contenedor);
+    await modulo.default(contenedor, parametro);
   } catch (error) {
     vaciar(contenedor);
     contenedor.append(elemento('p', { clase: 'vacio', texto: error.message }));
