@@ -22,7 +22,7 @@
 - **Tipografías:** Bebas Neue (títulos) e Inter (cuerpo), desde Google Fonts, igual que la web del club.
 - **Idioma:** toda la interfaz, los nombres de funciones y los mensajes de commit en español.
 - **Rama de trabajo:** `finanzas-club`.
-- **Correr las pruebas:** `node --test finanzas/js/tests/`
+- **Correr las pruebas:** `node --test`
 - **Probar a mano:** `python -m http.server 8000` desde la raíz del repo, luego abrir `http://localhost:8000/finanzas/`. Los módulos ES no funcionan abriendo el archivo directamente con doble clic.
 
 ---
@@ -702,7 +702,7 @@ Expected: PASS — 12 pruebas en verde.
 
 - [ ] **Step 5: Correr toda la suite**
 
-Run: `node --test finanzas/js/tests/`
+Run: `node --test`
 Expected: PASS — 41 pruebas en verde.
 
 - [ ] **Step 6: Commit**
@@ -3229,7 +3229,7 @@ git commit -m "Instalable en el celular como aplicacion"
 
 - [ ] **Step 1: Correr toda la suite automática**
 
-Run: `node --test finanzas/js/tests/`
+Run: `node --test`
 Expected: PASS — 41 pruebas en verde, 0 fallos.
 
 - [ ] **Step 2: Recorrer la lista de verificación manual**
@@ -3264,7 +3264,7 @@ Agregar al final de `finanzas/LEEME.md`:
 
 ## Correr las pruebas
 
-    node --test finanzas/js/tests/
+    node --test
 
 ## Probar en local
 
@@ -3287,7 +3287,7 @@ git push -u origin finanzas-club
 
 Al terminar la Task 19, tienen que ser ciertas todas estas:
 
-- `node --test finanzas/js/tests/` da 41 pruebas en verde.
+- `node --test` da 41 pruebas en verde.
 - No existe `node_modules` ni ningún `package.json` fuera de `finanzas/package.json`.
 - `grep -rn "esm.sh" finanzas/js/` devuelve una sola línea, en `cliente.js`.
 - `grep -rln "supabase" finanzas/js/vistas/` no devuelve nada: ninguna vista habla con la base directamente.

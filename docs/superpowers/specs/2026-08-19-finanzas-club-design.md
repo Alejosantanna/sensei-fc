@@ -98,7 +98,7 @@ finanzas/
     exportar.test.js
 ```
 
-Se prueba con `node --test finanzas/js/tests/`, y a mano levantando
+Se prueba con `node --test`, y a mano levantando
 `python -m http.server 8000` en la raíz del repo y entrando a
 `http://localhost:8000/finanzas/`.
 
