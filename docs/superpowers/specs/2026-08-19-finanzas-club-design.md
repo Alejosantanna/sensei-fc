@@ -91,13 +91,16 @@ finanzas/
       ajustes.js
   sql/
     esquema.sql           — tablas, vistas, índices y políticas RLS
-  tests.html              — corre las pruebas en el navegador
+  package.json            — solo {"type":"module"}; sin dependencias
   js/tests/
     formato.test.js
     calculos.test.js
     exportar.test.js
-    arnes.js              — assert mínimo y reporte visual
 ```
+
+Se prueba con `node --test finanzas/js/tests/`, y a mano levantando
+`python -m http.server 8000` en la raíz del repo y entrando a
+`http://localhost:8000/finanzas/`.
 
 **Sobre el service worker:** existe solo porque Android exige uno para ofrecer
 "instalar aplicación". No promete funcionamiento sin conexión — pide siempre a la
@@ -369,9 +372,14 @@ La sesión persiste en el dispositivo: la contraseña se escribe una vez.
 
 ## Testing
 
-Sin herramientas de build, las pruebas corren en el navegador. `finanzas/tests.html`
-carga los módulos puros y ejecuta sus aserciones, con resultado verde o rojo a la
-vista.
+Las pruebas corren con el ejecutor incorporado de Node (`node --test`), que ya está
+instalado en la máquina. No requiere descargar ni instalar ninguna librería: es una
+sola orden en la terminal y no cambia en nada cómo se despliega el sitio.
+
+Los tres módulos puros no tocan la red ni la pantalla, así que se prueban enteros
+así. Lo único que hace falta es un archivo `finanzas/package.json` de dos líneas
+para que Node entienda el formato de los módulos — no trae dependencias ni paso de
+compilación.
 
 **Cubierto por pruebas automáticas:**
 
