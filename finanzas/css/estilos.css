@@ -124,3 +124,65 @@ input:focus, select:focus, textarea:focus { outline: 2px solid var(--verde); bor
   #navegacion a.activa { box-shadow: inset 3px 0 0 var(--dorado); }
   #vista { padding: 1.5rem; padding-bottom: 1.5rem; }
 }
+
+/* ─── Piezas comunes ─── */
+.tarjeta {
+  background: var(--superficie);
+  border: 1px solid var(--borde);
+  border-radius: 12px;
+  padding: 1rem;
+  margin-bottom: 0.75rem;
+}
+.fila {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 0;
+  border-bottom: 1px solid var(--borde);
+}
+.fila:last-child { border-bottom: none; }
+.fila-crece { flex: 1; min-width: 0; }
+.fila-botones { display: flex; gap: 0.75rem; justify-content: flex-end; margin-top: 1rem; }
+.dorsal {
+  font-family: 'Bebas Neue', sans-serif;
+  color: var(--dorado);
+  font-size: 1.25rem;
+  min-width: 2.2rem;
+}
+.tenue { color: var(--tenue); font-size: 0.8rem; }
+.debe { color: var(--rojo); font-weight: 600; white-space: nowrap; }
+.al-dia { color: var(--verde); font-weight: 600; white-space: nowrap; }
+.numero-grande { font-size: 2rem; line-height: 1; }
+.encabezado-vista { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1rem; }
+.encabezado-vista h1 { font-size: 1.75rem; flex: 1; }
+.controles { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 1rem; }
+.controles input, .controles select { width: auto; flex: 1; min-width: 140px; }
+.vacio { text-align: center; color: var(--tenue); padding: 2.5rem 1rem; }
+
+.rejilla { display: grid; gap: 0.75rem; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); margin-bottom: 1rem; }
+
+.modal-fondo {
+  position: fixed; inset: 0; z-index: 50;
+  background: rgba(0, 0, 0, 0.7);
+  display: grid; place-items: center;
+  padding: 1rem;
+}
+.modal-caja {
+  background: var(--superficie);
+  border: 1px solid var(--borde);
+  border-radius: 14px;
+  padding: 1.25rem;
+  width: min(420px, 100%);
+  max-height: 90vh;
+  overflow-y: auto;
+}
+.modal-caja h2 { font-size: 1.4rem; margin-bottom: 1rem; }
+
+.aviso {
+  position: fixed; bottom: 5.5rem; left: 50%; transform: translateX(-50%);
+  background: var(--verde); color: var(--crema);
+  padding: 0.7rem 1.1rem; border-radius: 999px;
+  font-size: 0.9rem; z-index: 60; box-shadow: 0 6px 20px rgba(0,0,0,0.4);
+}
+.aviso-error { background: #7a2020; }
+@media (min-width: 820px) { .aviso { bottom: 1.5rem; } }
