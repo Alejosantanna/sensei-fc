@@ -1,13 +1,20 @@
 import { iniciarSesion, cerrarSesion, sesionActual } from './auth.js';
+import { iniciarRouter } from './router.js';
 
 const pantallaLogin = document.getElementById('pantalla-login');
 const app = document.getElementById('app');
 const formLogin = document.getElementById('form-login');
 const errorLogin = document.getElementById('error-login');
 
+let routerEncendido = false;
+
 function mostrarApp() {
   pantallaLogin.hidden = true;
   app.hidden = false;
+  if (!routerEncendido) {
+    routerEncendido = true;
+    iniciarRouter();
+  }
 }
 
 function mostrarLogin() {
