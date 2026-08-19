@@ -1,6 +1,13 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { sumarMontos, cajaClub, imputarPagos, pendientePorConcepto } from '../calculos.js';
+import {
+  sumarMontos,
+  cajaClub,
+  imputarPagos,
+  pendientePorConcepto,
+  jugadoresSinCuota,
+  resumenGeneracionCuota,
+} from '../calculos.js';
 
 test('sumarMontos suma una lista vacia como cero', () => {
   assert.equal(sumarMontos([]), 0);
@@ -86,4 +93,66 @@ test('pendientePorConcepto acumula varios cargos del mismo concepto', () => {
     { id: 'b', concepto: 'cuota', monto: 500, fecha: '2026-07-01' },
   ];
   assert.deepEqual(pendientePorConcepto(cargos, []), { cuota: 1000 });
+});
+
+// ─── Generacion de la cuota del mes ───
+
+const PLANTEL = [
+  { id: 'j1', nombre: 'Nacho Pintos', activo: true },
+  { id: 'j2', nombre: 'Mauro Rivas', activo: true },
+  { id: 'j3', nombre: 'Ex Jugador', activo: false },
+];
+
+test('jugadoresSinCuota devuelve los activos cuando no hay cuotas del periodo', () => {
+  const resultado = jugadoresSinCuota(PLANTEL, [], '2026-08');
+  assert.deepEqual(resultado.map((j) => j.id), ['j1', 'j2']);
+});
+
+test('jugadoresSinCuota excluye a los archivados', () => {
+  const resultado = jugadoresSinCuota(PLANTEL, [], '2026-08');
+  assert.equal(resultado.some((j) => j.id === 'j3'), false);
+});
+
+test('jugadoresSinCuota saltea a quien ya tiene la cuota del periodo', () => {
+  const cargos = [{ jugador_id: 'j1', concepto: 'cuota', periodo: '2026-08', monto: 500 }];
+  const resultado = jugadoresSinCuota(PLANTEL, cargos, '2026-08');
+  assert.deepEqual(resultado.map((j) => j.id), ['j2']);
+});
+
+test('jugadoresSinCuota ignora la cuota de otro mes', () => {
+  const cargos = [{ jugador_id: 'j1', concepto: 'cuota', periodo: '2026-07', monto: 500 }];
+  const resultado = jugadoresSinCuota(PLANTEL, cargos, '2026-08');
+  assert.deepEqual(resultado.map((j) => j.id), ['j1', 'j2']);
+});
+
+test('jugadoresSinCuota ignora cargos de otro concepto con el mismo periodo', () => {
+  const cargos = [{ jugador_id: 'j1', concepto: 'equipamiento', periodo: '2026-08', monto: 500 }];
+  const resultado = jugadoresSinCuota(PLANTEL, cargos, '2026-08');
+  assert.deepEqual(resultado.map((j) => j.id), ['j1', 'j2']);
+});
+
+test('jugadoresSinCuota devuelve vacio cuando ya se genero todo', () => {
+  const cargos = [
+    { jugador_id: 'j1', concepto: 'cuota', periodo: '2026-08', monto: 500 },
+    { jugador_id: 'j2', concepto: 'cuota', periodo: '2026-08', monto: 500 },
+  ];
+  assert.deepEqual(jugadoresSinCuota(PLANTEL, cargos, '2026-08'), []);
+});
+
+test('resumenGeneracionCuota calcula cantidad y total', () => {
+  const resumen = resumenGeneracionCuota(PLANTEL, [], '2026-08', 500);
+  assert.equal(resumen.cantidad, 2);
+  assert.equal(resumen.montoUnitario, 500);
+  assert.equal(resumen.total, 1000);
+  assert.deepEqual(resumen.pendientes.map((j) => j.id), ['j1', 'j2']);
+});
+
+test('resumenGeneracionCuota da total cero cuando no falta nadie', () => {
+  const cargos = [
+    { jugador_id: 'j1', concepto: 'cuota', periodo: '2026-08', monto: 500 },
+    { jugador_id: 'j2', concepto: 'cuota', periodo: '2026-08', monto: 500 },
+  ];
+  const resumen = resumenGeneracionCuota(PLANTEL, cargos, '2026-08', 500);
+  assert.equal(resumen.cantidad, 0);
+  assert.equal(resumen.total, 0);
 });

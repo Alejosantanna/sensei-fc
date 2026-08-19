@@ -23,6 +23,27 @@ export function imputarPagos(cargos, pagos) {
   });
 }
 
+// Quienes todavia no recibieron la cuota de ese mes. El indice unico de la
+// base es la red de seguridad; esto es solo para saber que mostrar y cuanto.
+export function jugadoresSinCuota(jugadores, cargos, periodo) {
+  const yaTienen = new Set(
+    cargos
+      .filter((c) => c.concepto === 'cuota' && c.periodo === periodo)
+      .map((c) => c.jugador_id),
+  );
+  return jugadores.filter((j) => j.activo && !yaTienen.has(j.id));
+}
+
+export function resumenGeneracionCuota(jugadores, cargos, periodo, montoUnitario) {
+  const pendientes = jugadoresSinCuota(jugadores, cargos, periodo);
+  return {
+    pendientes,
+    cantidad: pendientes.length,
+    montoUnitario,
+    total: pendientes.length * montoUnitario,
+  };
+}
+
 export function pendientePorConcepto(cargos, pagos) {
   const porConcepto = {};
   for (const cargo of imputarPagos(cargos, pagos)) {
