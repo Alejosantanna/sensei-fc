@@ -295,3 +295,6 @@ form .boton-principal { margin-top: 1.4rem; width: 100%; padding: 0.85rem; font-
 }
 .tarjeta a { color: var(--crema); text-decoration: none; }
 .tarjeta a:hover { color: var(--dorado); }
+
+.boton-peligro { color: var(--rojo); }
+.boton-peligro:hover { color: #ff9d9b; border-color: rgba(232, 145, 143, 0.4); background: rgba(232, 145, 143, 0.08); }

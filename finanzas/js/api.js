@@ -32,6 +32,16 @@ export async function cambiarEstadoJugador(id, activo) {
   revisar(await supabase.from('jugadores').update({ activo }).eq('id', id), 'cambiar el estado del jugador');
 }
 
+export async function actualizarJugador(id, { nombre, dorsal, telefono }) {
+  revisar(
+    await supabase
+      .from('jugadores')
+      .update({ nombre, dorsal: dorsal || null, telefono: telefono || null })
+      .eq('id', id),
+    'guardar los datos del jugador',
+  );
+}
+
 // ─── Cargos y pagos ───
 
 export async function listarCargos(jugadorId) {
@@ -58,6 +68,20 @@ export async function crearCargos(cargos) {
   revisar(await supabase.from('cargos').insert(filas), 'guardar el cargo');
 }
 
+export async function actualizarCargo(id, { concepto, descripcion, monto, fecha }) {
+  revisar(
+    await supabase
+      .from('cargos')
+      .update({ concepto, descripcion: descripcion || null, monto, fecha })
+      .eq('id', id),
+    'guardar el cargo',
+  );
+}
+
+export async function borrarCargo(id) {
+  revisar(await supabase.from('cargos').delete().eq('id', id), 'borrar el cargo');
+}
+
 export async function listarPagos(jugadorId) {
   return revisar(
     await supabase.from('pagos').select('*').eq('jugador_id', jugadorId).order('fecha'),
@@ -80,6 +104,17 @@ export async function crearPago({ jugadorId, monto, fecha, metodo, nota }) {
     }),
     'registrar el pago',
   );
+}
+
+export async function actualizarPago(id, { monto, fecha, metodo, nota }) {
+  revisar(
+    await supabase.from('pagos').update({ monto, fecha, metodo, nota: nota || null }).eq('id', id),
+    'guardar el pago',
+  );
+}
+
+export async function borrarPago(id) {
+  revisar(await supabase.from('pagos').delete().eq('id', id), 'borrar el pago');
 }
 
 // ─── Sponsors ───

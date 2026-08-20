@@ -1,4 +1,4 @@
-import { listarJugadores, crearJugador, cambiarEstadoJugador, crearCargos } from '../api.js';
+import { listarJugadores, crearJugador, cambiarEstadoJugador, crearCargos, actualizarJugador } from '../api.js';
 import { formatearMoneda } from '../formato.js';
 import { elemento, abrirModal, confirmar, avisar } from '../ui.js';
 import { dibujarVistaActual } from '../router.js';
@@ -58,7 +58,49 @@ function formularioNuevo() {
   });
 }
 
+export function formularioEditar(jugador, alGuardar) {
+  const form = elemento('form', {}, [
+    elemento('label', { for: 'e-nombre', texto: 'Nombre y apellido' }),
+    elemento('input', { id: 'e-nombre', name: 'nombre', required: true, value: jugador.nombre }),
+    elemento('label', { for: 'e-dorsal', texto: 'Dorsal' }),
+    elemento('input', { id: 'e-dorsal', name: 'dorsal', type: 'number', min: '0', value: jugador.dorsal ?? '' }),
+    elemento('label', { for: 'e-telefono', texto: 'Telefono' }),
+    elemento('input', { id: 'e-telefono', name: 'telefono', type: 'tel', value: jugador.telefono ?? '' }),
+    elemento('button', { type: 'submit', clase: 'boton-principal', texto: 'Guardar cambios' }),
+  ]);
+
+  const { cerrar } = abrirModal(`Editar a ${jugador.nombre}`, form);
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const boton = form.querySelector('button');
+    boton.disabled = true;
+    try {
+      await actualizarJugador(jugador.id, {
+        nombre: form.nombre.value.trim(),
+        dorsal: form.dorsal.value ? Number(form.dorsal.value) : null,
+        telefono: form.telefono.value.trim(),
+      });
+      cerrar();
+      avisar('Datos guardados.');
+      (alGuardar ?? dibujarVistaActual)();
+    } catch (error) {
+      avisar(error.message, 'error');
+      boton.disabled = false;
+    }
+  });
+}
+
 function filaJugador(jugador) {
+  const editar = elemento('button', {
+    clase: 'boton-texto',
+    texto: 'Editar',
+    onClick: (e) => {
+      e.stopPropagation();
+      formularioEditar(jugador);
+    },
+  });
+
   const acciones = elemento('button', {
     clase: 'boton-texto',
     texto: jugador.activo ? 'Archivar' : 'Reactivar',
@@ -84,6 +126,7 @@ function filaJugador(jugador) {
     elemento('span', { clase: 'dorsal', texto: jugador.dorsal ? `#${jugador.dorsal}` : '' }),
     elemento('span', { clase: 'fila-crece', texto: jugador.nombre }),
     saldo,
+    editar,
     acciones,
   ]);
   fila.addEventListener('click', () => { location.hash = `jugador/${jugador.id}`; });
