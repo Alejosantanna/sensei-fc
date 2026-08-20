@@ -1,6 +1,6 @@
 import {
   listarJugadores, todosLosCargos, todosLosPagos, todosLosSponsorPagos,
-  listarGastos, listarSponsors, crearCargos, leerConfig,
+  listarGastos, listarSponsors, crearCargos, leerConfig, listarIngresos,
 } from '../api.js';
 import { cajaClub, sumarMontos, resumenGeneracionCuota } from '../calculos.js';
 import { formatearMoneda, periodoActual, nombrePeriodo } from '../formato.js';
@@ -51,7 +51,7 @@ function avisoCuota(resumen, periodo) {
 }
 
 export default async function dibujar(contenedor) {
-  const [jugadores, cargos, pagos, sponsorPagos, gastos, sponsors, config] = await Promise.all([
+  const [jugadores, cargos, pagos, sponsorPagos, gastos, sponsors, config, ingresos] = await Promise.all([
     listarJugadores({ incluirArchivados: true }),
     todosLosCargos(),
     todosLosPagos(),
@@ -59,11 +59,12 @@ export default async function dibujar(contenedor) {
     listarGastos(),
     listarSponsors(),
     leerConfig(),
+    listarIngresos(),
   ]);
 
   const periodo = periodoActual();
   const montoCuota = Number(config.cuota_monto ?? 0);
-  const caja = cajaClub({ pagos, sponsorPagos, gastos });
+  const caja = cajaClub({ pagos, sponsorPagos, gastos, ingresos });
   const deudaJugadores = jugadores.reduce((s, j) => s + Math.max(j.deuda, 0), 0);
   const pendienteSponsors = sponsors.reduce((s, x) => s + Math.max(x.pendiente, 0), 0);
   const gastosDelMes = sumarMontos(gastos.filter((g) => g.fecha.startsWith(periodo)));
@@ -94,7 +95,7 @@ export default async function dibujar(contenedor) {
       elemento('a', { href: '#jugadores', clase: 'fila-crece', texto: 'Jugadores →' }),
     ]),
     elemento('div', { clase: 'fila' }, [
-      elemento('a', { href: '#gastos', clase: 'fila-crece', texto: 'Cargar un gasto →' }),
+      elemento('a', { href: '#gastos', clase: 'fila-crece', texto: 'Cargar un movimiento de caja →' }),
     ]),
   ]);
   contenedor.append(atajos);

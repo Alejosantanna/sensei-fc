@@ -82,6 +82,20 @@ create table if not exists gastos (
   creado_por   uuid references auth.users(id)
 );
 
+-- Plata que entra y no es ni cuota de jugador ni sponsor:
+-- rifas, asados, venta de camisetas a hinchas, aportes sueltos.
+create table if not exists ingresos (
+  id           uuid primary key default gen_random_uuid(),
+  fecha        date not null default current_date,
+  categoria    text not null check (categoria in
+                 ('evento','rifa','venta','aporte','otro')),
+  descripcion  text not null,
+  monto        integer not null check (monto > 0),
+  nota         text,
+  creado_en    timestamptz not null default now(),
+  creado_por   uuid references auth.users(id)
+);
+
 create table if not exists config (
   clave          text primary key,
   valor          text not null,
@@ -127,6 +141,7 @@ alter table pagos         enable row level security;
 alter table sponsors      enable row level security;
 alter table sponsor_pagos enable row level security;
 alter table gastos        enable row level security;
+alter table ingresos      enable row level security;
 alter table config        enable row level security;
 
 drop policy if exists dirigencia on jugadores;
@@ -151,6 +166,10 @@ create policy dirigencia on sponsor_pagos
 
 drop policy if exists dirigencia on gastos;
 create policy dirigencia on gastos
+  for all to authenticated using (true) with check (true);
+
+drop policy if exists dirigencia on ingresos;
+create policy dirigencia on ingresos
   for all to authenticated using (true) with check (true);
 
 drop policy if exists dirigencia on config;

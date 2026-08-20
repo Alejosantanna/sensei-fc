@@ -31,6 +31,21 @@ test('cajaClub puede quedar en rojo', () => {
   assert.equal(caja, -5000);
 });
 
+test('cajaClub suma los ingresos que no son ni cuota ni sponsor', () => {
+  const caja = cajaClub({
+    pagos: [{ monto: 1000 }],
+    sponsorPagos: [{ monto: 2000 }],
+    gastos: [{ monto: 500 }],
+    ingresos: [{ monto: 4000 }, { monto: 1500 }],
+  });
+  assert.equal(caja, 8000);
+});
+
+test('cajaClub sigue andando si no le pasan ingresos', () => {
+  const caja = cajaClub({ pagos: [{ monto: 900 }], sponsorPagos: [], gastos: [] });
+  assert.equal(caja, 900);
+});
+
 // ─── Imputacion de pagos por antiguedad ───
 
 const CARGOS = [

@@ -1,4 +1,4 @@
-import { listarJugadores, todosLosCargos, todosLosPagos, crearCargos } from '../api.js';
+import { listarJugadores, todosLosCargos, todosLosPagos, crearCargos, crearPagosEnLote, leerConfig } from '../api.js';
 import { pendientePorConcepto } from '../calculos.js';
 import { textoListadoDeudores, aCSV } from '../exportar.js';
 import { formatearMoneda } from '../formato.js';
@@ -21,22 +21,7 @@ function hoyIso() {
 }
 
 function formularioMasivo(jugadores) {
-  const casillas = jugadores.map((j) =>
-    elemento('label', { clase: 'casilla' }, [
-      elemento('input', { type: 'checkbox', value: j.id }),
-      elemento('span', { texto: j.dorsal ? `#${j.dorsal} ${j.nombre}` : j.nombre }),
-    ]),
-  );
-
-  const todos = elemento('button', {
-    type: 'button',
-    clase: 'boton-texto',
-    texto: 'Marcar a todos',
-    onClick: () => {
-      const marcar = casillas.some((l) => !l.querySelector('input').checked);
-      for (const l of casillas) l.querySelector('input').checked = marcar;
-    },
-  });
+  const sel = selectorDeJugadores(jugadores, (j) => (j.dorsal ? `#${j.dorsal} ${j.nombre}` : j.nombre));
 
   const form = elemento('form', {}, [
     elemento('label', { for: 'm-concepto', texto: 'Concepto' }),
@@ -50,8 +35,8 @@ function formularioMasivo(jugadores) {
     elemento('label', { for: 'm-monto', texto: 'Monto por jugador' }),
     elemento('input', { id: 'm-monto', name: 'monto', type: 'number', min: '1', required: true }),
     elemento('label', { texto: 'A quienes' }),
-    todos,
-    elemento('div', { clase: 'lista-casillas' }, casillas),
+    sel.marcarTodos,
+    sel.lista,
     elemento('button', { type: 'submit', clase: 'boton-principal', texto: 'Cargar a los marcados' }),
   ]);
 
@@ -59,7 +44,7 @@ function formularioMasivo(jugadores) {
 
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
-    const marcados = casillas.map((l) => l.querySelector('input')).filter((i) => i.checked).map((i) => i.value);
+    const marcados = sel.marcados();
     if (marcados.length === 0) {
       avisar('No marcaste a ningun jugador.', 'error');
       return;
@@ -84,12 +69,104 @@ function formularioMasivo(jugadores) {
   });
 }
 
+// Lista de casillas reutilizable: devuelve el contenedor y una funcion
+// que dice quienes quedaron marcados.
+function selectorDeJugadores(jugadores, etiqueta) {
+  const casillas = jugadores.map((j) =>
+    elemento('label', { clase: 'casilla' }, [
+      elemento('input', { type: 'checkbox', value: j.id }),
+      elemento('span', { texto: etiqueta(j) }),
+    ]),
+  );
+
+  const marcarTodos = elemento('button', {
+    type: 'button',
+    clase: 'boton-texto',
+    texto: 'Marcar a todos',
+    onClick: () => {
+      const marcar = casillas.some((l) => !l.querySelector('input').checked);
+      for (const l of casillas) l.querySelector('input').checked = marcar;
+    },
+  });
+
+  return {
+    marcarTodos,
+    lista: elemento('div', { clase: 'lista-casillas' }, casillas),
+    marcados: () => casillas.map((l) => l.querySelector('input')).filter((i) => i.checked).map((i) => i.value),
+  };
+}
+
+function formularioCobroMasivo(deudores, montoCuota) {
+  if (deudores.length === 0) {
+    avisar('No hay nadie con deuda para cobrar.', 'error');
+    return;
+  }
+
+  const sel = selectorDeJugadores(
+    deudores,
+    (j) => `${j.dorsal ? `#${j.dorsal} ` : ''}${j.nombre} — debe ${formatearMoneda(j.pendiente)}`,
+  );
+
+  const form = elemento('form', {}, [
+    elemento('label', { for: 'cm-monto', texto: 'Monto que pago cada uno' }),
+    elemento('input', {
+      id: 'cm-monto', name: 'monto', type: 'number', min: '1', required: true,
+      value: montoCuota > 0 ? montoCuota : '',
+      placeholder: 'Ej: 500',
+    }),
+    elemento('label', { for: 'cm-fecha', texto: 'Fecha' }),
+    elemento('input', { id: 'cm-fecha', name: 'fecha', type: 'date', value: hoyIso(), required: true }),
+    elemento('label', { for: 'cm-metodo', texto: 'Metodo' }),
+    elemento('select', { id: 'cm-metodo', name: 'metodo' }, [
+      elemento('option', { value: 'efectivo', texto: 'Efectivo' }),
+      elemento('option', { value: 'transferencia', texto: 'Transferencia' }),
+      elemento('option', { value: 'otro', texto: 'Otro' }),
+    ]),
+    elemento('label', { for: 'cm-nota', texto: 'Nota (opcional)' }),
+    elemento('input', { id: 'cm-nota', name: 'nota', placeholder: 'Cuota de agosto' }),
+    elemento('label', { texto: 'Quienes pagaron' }),
+    sel.marcarTodos,
+    sel.lista,
+    elemento('button', { type: 'submit', clase: 'boton-principal', texto: 'Registrar los pagos' }),
+  ]);
+
+  const { cerrar } = abrirModal('Cobrar a varios', form);
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const marcados = sel.marcados();
+    if (marcados.length === 0) {
+      avisar('No marcaste a nadie.', 'error');
+      return;
+    }
+    const boton = form.querySelector('button[type=submit]');
+    boton.disabled = true;
+    try {
+      await crearPagosEnLote(marcados.map((jugadorId) => ({
+        jugadorId,
+        monto: Number(form.monto.value),
+        fecha: form.fecha.value,
+        metodo: form.metodo.value,
+        nota: form.nota.value.trim(),
+      })));
+      cerrar();
+      avisar(`${marcados.length} pagos registrados.`);
+      dibujarVistaActual();
+    } catch (error) {
+      avisar(error.message, 'error');
+      boton.disabled = false;
+    }
+  });
+}
+
 export default async function dibujar(contenedor) {
-  const [jugadores, cargos, pagos] = await Promise.all([
+  const [jugadores, cargos, pagos, config] = await Promise.all([
     listarJugadores({ incluirArchivados: true }),
     todosLosCargos(),
     todosLosPagos(),
+    leerConfig(),
   ]);
+  const montoCuota = Number(config.cuota_monto ?? 0);
 
   const porJugador = jugadores.map((j) => {
     const suyos = cargos.filter((c) => c.jugador_id === j.id);
@@ -100,9 +177,14 @@ export default async function dibujar(contenedor) {
   const encabezado = elemento('div', { clase: 'encabezado-vista' }, [
     elemento('h1', { texto: 'Deudas' }),
     elemento('button', {
-      clase: 'boton-principal',
+      clase: 'boton-texto',
       texto: '+ Cargo masivo',
       onClick: () => formularioMasivo(jugadores.filter((j) => j.activo)),
+    }),
+    elemento('button', {
+      clase: 'boton-principal',
+      texto: '✓ Cobrar a varios',
+      onClick: () => formularioCobroMasivo(deudoresVisibles(), montoCuota),
     }),
   ]);
 

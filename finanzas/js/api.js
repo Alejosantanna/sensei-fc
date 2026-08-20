@@ -93,6 +93,18 @@ export async function todosLosPagos() {
   return revisar(await supabase.from('pagos').select('*'), 'cargar los pagos');
 }
 
+// Un pago por jugador, todos de una. Sirve para "estos ocho ya pagaron".
+export async function crearPagosEnLote(pagos) {
+  const filas = pagos.map((p) => ({
+    jugador_id: p.jugadorId,
+    monto: p.monto,
+    fecha: p.fecha,
+    metodo: p.metodo,
+    nota: p.nota || null,
+  }));
+  revisar(await supabase.from('pagos').insert(filas), 'registrar los pagos');
+}
+
 export async function crearPago({ jugadorId, monto, fecha, metodo, nota }) {
   revisar(
     await supabase.from('pagos').insert({
@@ -165,6 +177,50 @@ export async function crearGasto({ fecha, categoria, descripcion, monto, proveed
     await supabase.from('gastos').insert({ fecha, categoria, descripcion, monto, proveedor: proveedor || null }),
     'guardar el gasto',
   );
+}
+
+export async function actualizarGasto(id, { fecha, categoria, descripcion, monto, proveedor }) {
+  revisar(
+    await supabase
+      .from('gastos')
+      .update({ fecha, categoria, descripcion, monto, proveedor: proveedor || null })
+      .eq('id', id),
+    'guardar el gasto',
+  );
+}
+
+export async function borrarGasto(id) {
+  revisar(await supabase.from('gastos').delete().eq('id', id), 'borrar el gasto');
+}
+
+// ─── Ingresos que no son ni cuota ni sponsor ───
+
+export async function listarIngresos() {
+  return revisar(
+    await supabase.from('ingresos').select('*').order('fecha', { ascending: false }),
+    'cargar los ingresos',
+  );
+}
+
+export async function crearIngreso({ fecha, categoria, descripcion, monto, nota }) {
+  revisar(
+    await supabase.from('ingresos').insert({ fecha, categoria, descripcion, monto, nota: nota || null }),
+    'guardar el ingreso',
+  );
+}
+
+export async function actualizarIngreso(id, { fecha, categoria, descripcion, monto, nota }) {
+  revisar(
+    await supabase
+      .from('ingresos')
+      .update({ fecha, categoria, descripcion, monto, nota: nota || null })
+      .eq('id', id),
+    'guardar el ingreso',
+  );
+}
+
+export async function borrarIngreso(id) {
+  revisar(await supabase.from('ingresos').delete().eq('id', id), 'borrar el ingreso');
 }
 
 // ─── Ajustes ───

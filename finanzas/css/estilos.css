@@ -298,3 +298,13 @@ form .boton-principal { margin-top: 1.4rem; width: 100%; padding: 0.85rem; font-
 
 .boton-peligro { color: var(--rojo); }
 .boton-peligro:hover { color: #ff9d9b; border-color: rgba(232, 145, 143, 0.4); background: rgba(232, 145, 143, 0.08); }
+
+/* ─── Pestanas (Gastos / Ingresos) ─── */
+.pestanas { display: flex; gap: 0.4rem; margin-bottom: 1.1rem; border-bottom: 1px solid var(--borde); }
+.pestana {
+  background: none; border: none; border-bottom: 2px solid transparent;
+  color: var(--tenue); font: inherit; font-weight: 600; font-size: 0.9rem;
+  padding: 0.6rem 1rem; cursor: pointer; transition: color 0.15s, border-color 0.15s;
+}
+.pestana:hover { color: var(--crema); }
+.pestana.activa { color: var(--dorado); border-bottom-color: var(--dorado); }
