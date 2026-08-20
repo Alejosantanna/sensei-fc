@@ -1,0 +1,17 @@
+{
+  "name": "Finanzas Sensei FC",
+  "short_name": "Finanzas",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#0a0a0a",
+  "theme_color": "#0d3d26",
+  "icons": [
+    {
+      "src": "../imagenes/EscudoSensei-Bueno.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}
