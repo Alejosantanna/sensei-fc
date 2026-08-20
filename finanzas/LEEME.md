@@ -51,3 +51,22 @@ usuarios creados.
     git push
 
 El sitio queda en https://alejosantanna.github.io/sensei-fc/finanzas/
+
+## Uso diario
+
+- **Empieza el mes:** entrar al Panel y tocar "Generar" en el aviso dorado.
+- **Cobrar:** Jugadores → tocar al jugador → Cobrar.
+- **Mandar el listado:** Deudas → "Copiar para WhatsApp" → pegar en el grupo.
+- **Apurar a uno:** ficha del jugador → "Copiar mensaje para WhatsApp".
+- **Comprar algo:** Gastos → "+ Agregar".
+- **Cambiar el monto de la cuota:** Ajustes.
+
+## Correr las pruebas
+
+    node --test
+
+## Probar en local
+
+    python -m http.server 8000
+
+Luego http://localhost:8000/finanzas/
