@@ -1,13 +1,22 @@
 :root {
   --verde: #1a5c3a;
+  --verde-claro: #22734a;
   --verde-oscuro: #0d3d26;
   --dorado: #c9a84c;
   --crema: #f5f0e8;
   --negro: #0a0a0a;
-  --superficie: #11241b;
-  --borde: rgba(245, 240, 232, 0.12);
-  --rojo: #e08a8a;
+  --fondo: #08110d;
+  --superficie: #10201a;
+  --superficie-alta: #162c22;
+  --borde: rgba(245, 240, 232, 0.10);
+  --borde-fuerte: rgba(245, 240, 232, 0.18);
+  --rojo: #e8918f;
   --tenue: rgba(245, 240, 232, 0.55);
+  --tenue-max: rgba(245, 240, 232, 0.38);
+  --sombra: 0 10px 30px rgba(0, 0, 0, 0.45);
+  /* Trama diagonal, guiño a los graficos del Instagram del club */
+  --trama: repeating-linear-gradient(115deg,
+             transparent 0 14px, rgba(245, 240, 232, 0.028) 14px 16px);
 }
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -17,16 +26,21 @@
 [hidden] { display: none !important; }
 
 body {
-  background: var(--negro);
+  background: var(--fondo);
   color: var(--crema);
   font-family: 'Inter', system-ui, sans-serif;
   min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
 }
 
-h1, h2, .titulo-cabecera, .numero-grande {
+h1, h2, .titulo-cabecera, .numero-grande, .dorsal {
   font-family: 'Bebas Neue', sans-serif;
   letter-spacing: 0.04em;
+  font-weight: 400;
 }
+
+/* Los montos se leen mejor con cifras de ancho fijo */
+.debe, .al-dia, .numero-grande, .monto { font-variant-numeric: tabular-nums; }
 
 /* ─── Login ─── */
 #pantalla-login {
@@ -34,96 +48,135 @@ h1, h2, .titulo-cabecera, .numero-grande {
   display: grid;
   place-items: center;
   padding: 1.5rem;
-  background: radial-gradient(circle at 50% 0%, var(--verde-oscuro), var(--negro) 70%);
+  background:
+    var(--trama),
+    radial-gradient(ellipse at 50% -10%, var(--verde-oscuro), var(--fondo) 65%);
 }
 #form-login {
-  width: min(360px, 100%);
+  width: min(370px, 100%);
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: 0.35rem;
+  background: rgba(16, 32, 26, 0.75);
+  border: 1px solid var(--borde);
+  border-radius: 18px;
+  padding: 2rem 1.75rem 1.75rem;
+  box-shadow: var(--sombra);
+  backdrop-filter: blur(6px);
 }
-.escudo-login { width: 96px; margin: 0 auto 1rem; }
-#form-login h1 { font-size: 2.5rem; text-align: center; line-height: 1; }
-.subtitulo { text-align: center; color: var(--dorado); margin-bottom: 1.5rem; letter-spacing: 0.2em; font-size: 0.75rem; text-transform: uppercase; }
-label { font-size: 0.8rem; color: var(--tenue); margin-top: 0.5rem; }
+.escudo-login { width: 88px; margin: 0 auto 1.1rem; display: block; }
+#form-login h1 { font-size: 2.6rem; text-align: center; line-height: 0.95; }
+.subtitulo {
+  text-align: center; color: var(--dorado); margin-bottom: 1.75rem;
+  letter-spacing: 0.28em; font-size: 0.7rem; text-transform: uppercase;
+}
+label { font-size: 0.75rem; color: var(--tenue); margin-top: 0.7rem; letter-spacing: 0.02em; }
 
 input, select, textarea {
-  background: var(--superficie);
-  border: 1px solid var(--borde);
-  border-radius: 8px;
+  background: rgba(8, 17, 13, 0.6);
+  border: 1px solid var(--borde-fuerte);
+  border-radius: 10px;
   color: var(--crema);
-  padding: 0.75rem;
+  padding: 0.7rem 0.8rem;
   font: inherit;
-  font-size: 1rem;
+  font-size: 0.95rem;
   width: 100%;
+  transition: border-color 0.15s, box-shadow 0.15s;
 }
-input:focus, select:focus, textarea:focus { outline: 2px solid var(--verde); border-color: var(--verde); }
+input::placeholder { color: var(--tenue-max); }
+input:focus, select:focus, textarea:focus {
+  outline: none;
+  border-color: var(--verde-claro);
+  box-shadow: 0 0 0 3px rgba(34, 115, 74, 0.25);
+}
 
+/* ─── Botones ─── */
 .boton-principal {
   background: var(--verde);
   color: var(--crema);
-  border: none;
-  border-radius: 8px;
-  padding: 0.85rem;
+  border: 1px solid transparent;
+  border-radius: 10px;
+  padding: 0.7rem 1.1rem;
   font: inherit;
   font-weight: 600;
-  font-size: 1rem;
-  margin-top: 1.25rem;
+  font-size: 0.9rem;
   cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.15s, transform 0.1s;
 }
-.boton-principal:hover { background: #22734a; }
-.boton-texto { background: none; border: none; color: var(--tenue); font: inherit; cursor: pointer; }
-.error { color: #e88; font-size: 0.85rem; margin-top: 0.75rem; text-align: center; }
+.boton-principal:hover { background: var(--verde-claro); }
+.boton-principal:active { transform: translateY(1px); }
+.boton-principal:disabled { opacity: 0.55; cursor: default; }
+/* El margen superior es para el boton de enviar de un formulario, no para todos */
+form .boton-principal { margin-top: 1.4rem; width: 100%; padding: 0.85rem; font-size: 1rem; }
+
+.boton-texto {
+  background: none;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  padding: 0.4rem 0.7rem;
+  color: var(--tenue);
+  font: inherit;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: color 0.15s, border-color 0.15s, background 0.15s;
+}
+.boton-texto:hover { color: var(--dorado); border-color: var(--borde-fuerte); background: rgba(245, 240, 232, 0.04); }
+.error { color: var(--rojo); font-size: 0.85rem; margin-top: 0.9rem; text-align: center; }
 
 /* ─── Cascaron ─── */
 #cabecera {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
-  padding: 0.75rem 1rem;
-  background: var(--verde-oscuro);
-  border-bottom: 1px solid var(--borde);
+  gap: 0.7rem;
+  padding: 0.7rem 1rem;
+  background: var(--trama), linear-gradient(180deg, var(--verde-oscuro), #0b3320);
+  border-bottom: 1px solid var(--dorado);
   position: sticky;
   top: 0;
   z-index: 10;
 }
-.escudo-chico { width: 28px; }
-.titulo-cabecera { font-size: 1.4rem; flex: 1; }
+.escudo-chico { width: 26px; }
+.titulo-cabecera { font-size: 1.35rem; flex: 1; letter-spacing: 0.12em; }
 
-#vista { padding: 1rem; padding-bottom: 5.5rem; max-width: 900px; margin: 0 auto; }
+#vista { padding: 1.1rem; padding-bottom: 5.5rem; width: 100%; max-width: 1240px; margin-inline: auto; }
 
 #navegacion {
   position: fixed;
   bottom: 0; left: 0; right: 0;
   display: flex;
-  background: var(--verde-oscuro);
-  border-top: 1px solid var(--borde);
+  background: linear-gradient(180deg, #0b3320, var(--verde-oscuro));
+  border-top: 1px solid var(--borde-fuerte);
   z-index: 10;
 }
 #navegacion a {
   flex: 1;
   text-align: center;
-  padding: 0.7rem 0.2rem;
+  padding: 0.65rem 0.2rem;
   color: var(--tenue);
   text-decoration: none;
-  font-size: 0.7rem;
-  font-weight: 500;
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  transition: color 0.15s, background 0.15s;
 }
-#navegacion a.activa { color: var(--dorado); box-shadow: inset 0 2px 0 var(--dorado); }
+#navegacion a:hover { color: var(--crema); }
+#navegacion a.activa { color: var(--dorado); box-shadow: inset 0 2px 0 var(--dorado); background: rgba(201, 168, 76, 0.08); }
 
 /* ─── Escritorio ─── */
 @media (min-width: 820px) {
   /* Areas con nombre: la ubicacion no depende del orden del HTML. */
   #app {
     display: grid;
-    grid-template-columns: 220px minmax(0, 1fr);
+    grid-template-columns: 216px minmax(0, 1fr);
     grid-template-rows: auto 1fr;
     grid-template-areas:
       "cabecera cabecera"
       "nav      vista";
     min-height: 100vh;
   }
-  #cabecera   { grid-area: cabecera; }
+  #cabecera   { grid-area: cabecera; padding: 0.85rem 1.5rem; }
   #navegacion { grid-area: nav; }
   #vista      { grid-area: vista; }
 
@@ -131,84 +184,114 @@ input:focus, select:focus, textarea:focus { outline: 2px solid var(--verde); bor
     position: static;      /* deja de ser fija: ahora es una columna mas */
     inset: auto;           /* limpia el bottom/left/right de la version movil */
     flex-direction: column;
-    align-content: start;
     border-top: none;
     border-right: 1px solid var(--borde);
-    padding-top: 0.5rem;
+    padding: 0.75rem 0.6rem;
+    gap: 0.15rem;
+    background: linear-gradient(180deg, var(--verde-oscuro), rgba(13, 61, 38, 0.35));
   }
   /* Sin esto cada enlace se estira a 1/6 del alto de la pantalla. */
-  #navegacion a { flex: 0 0 auto; text-align: left; padding: 0.8rem 1.25rem; font-size: 0.9rem; }
+  #navegacion a {
+    flex: 0 0 auto;
+    text-align: left;
+    padding: 0.7rem 0.9rem;
+    font-size: 0.8rem;
+    border-radius: 8px;
+  }
   #navegacion a.activa { box-shadow: inset 3px 0 0 var(--dorado); }
 
-  #vista { padding: 1.5rem; padding-bottom: 1.5rem; }
+  /* Sin margenes automaticos: en una grilla anulan el estirado y dejan
+     el contenido del ancho de lo que haya adentro. */
+  #vista { padding: 2rem 2.25rem; margin-inline: 0; justify-self: center; }
 }
 
 /* ─── Piezas comunes ─── */
 .tarjeta {
   background: var(--superficie);
   border: 1px solid var(--borde);
-  border-radius: 12px;
-  padding: 1rem;
-  margin-bottom: 0.75rem;
+  border-radius: 14px;
+  padding: 1.1rem 1.25rem;
+  margin-bottom: 0.9rem;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.25);
 }
+.tarjeta h2 { font-size: 1.25rem; color: var(--crema); margin-bottom: 0.35rem; letter-spacing: 0.08em; }
+
 .fila {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
-  padding: 0.75rem 0;
+  gap: 1rem;
+  padding: 0.85rem 0.25rem;
   border-bottom: 1px solid var(--borde);
 }
 .fila:last-child { border-bottom: none; }
 .fila-crece { flex: 1; min-width: 0; }
-.fila-botones { display: flex; gap: 0.75rem; justify-content: flex-end; margin-top: 1rem; }
+.fila-botones { display: flex; gap: 0.6rem; justify-content: flex-end; align-items: center; margin-top: 1rem; }
+
 .dorsal {
-  font-family: 'Bebas Neue', sans-serif;
   color: var(--dorado);
-  font-size: 1.25rem;
-  min-width: 2.2rem;
+  font-size: 1.3rem;
+  min-width: 2.4rem;
+  line-height: 1;
 }
+/* Un jugador sin dorsal no deja un hueco raro al principio de la fila */
+.dorsal:empty { display: none; }
+
 .tenue { color: var(--tenue); font-size: 0.8rem; }
 .debe { color: var(--rojo); font-weight: 600; white-space: nowrap; }
-.al-dia { color: var(--verde); font-weight: 600; white-space: nowrap; }
-.numero-grande { font-size: 2rem; line-height: 1; }
-.encabezado-vista { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1rem; }
-.encabezado-vista h1 { font-size: 1.75rem; flex: 1; }
-.controles { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 1rem; }
-.controles input, .controles select { width: auto; flex: 1; min-width: 140px; }
+.al-dia { color: #6bbd8d; font-weight: 600; white-space: nowrap; }
+.numero-grande { font-size: 2.4rem; line-height: 1; letter-spacing: 0.02em; }
+
+.encabezado-vista { display: flex; align-items: center; gap: 1rem; margin-bottom: 1.4rem; padding-bottom: 0.9rem; border-bottom: 1px solid var(--borde); }
+.encabezado-vista h1 { font-size: 2rem; flex: 1; letter-spacing: 0.1em; }
+
+.controles { display: flex; gap: 0.6rem; flex-wrap: wrap; margin-bottom: 1.1rem; }
+.controles input, .controles select { width: auto; flex: 1; min-width: 150px; max-width: 320px; }
+
 .vacio { text-align: center; color: var(--tenue); padding: 2.5rem 1rem; }
 
-.rejilla { display: grid; gap: 0.75rem; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); margin-bottom: 1rem; }
+.rejilla { display: grid; gap: 0.9rem; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); margin-bottom: 1.1rem; }
+.rejilla .tarjeta { margin-bottom: 0; }
+.rejilla .tenue { text-transform: uppercase; letter-spacing: 0.1em; font-size: 0.68rem; margin-bottom: 0.5rem; }
 
 .modal-fondo {
   position: fixed; inset: 0; z-index: 50;
-  background: rgba(0, 0, 0, 0.7);
+  background: rgba(4, 8, 6, 0.75);
   display: grid; place-items: center;
   padding: 1rem;
+  backdrop-filter: blur(3px);
 }
 .modal-caja {
-  background: var(--superficie);
-  border: 1px solid var(--borde);
-  border-radius: 14px;
-  padding: 1.25rem;
-  width: min(420px, 100%);
+  background: var(--superficie-alta);
+  border: 1px solid var(--borde-fuerte);
+  border-radius: 16px;
+  padding: 1.5rem;
+  width: min(430px, 100%);
   max-height: 90vh;
   overflow-y: auto;
+  box-shadow: var(--sombra);
 }
-.modal-caja h2 { font-size: 1.4rem; margin-bottom: 1rem; }
+.modal-caja h2 { font-size: 1.5rem; margin-bottom: 0.5rem; }
 
 .aviso {
   position: fixed; bottom: 5.5rem; left: 50%; transform: translateX(-50%);
   background: var(--verde); color: var(--crema);
-  padding: 0.7rem 1.1rem; border-radius: 999px;
-  font-size: 0.9rem; z-index: 60; box-shadow: 0 6px 20px rgba(0,0,0,0.4);
+  padding: 0.7rem 1.2rem; border-radius: 999px;
+  font-size: 0.9rem; z-index: 60; box-shadow: var(--sombra);
 }
 .aviso-error { background: #7a2020; }
 @media (min-width: 820px) { .aviso { bottom: 1.5rem; } }
-.fila-clicable { cursor: pointer; }
-.fila-clicable:hover { background: rgba(245, 240, 232, 0.04); }
-.lista-casillas { max-height: 240px; overflow-y: auto; border: 1px solid var(--borde); border-radius: 8px; padding: 0.5rem; margin-top: 0.5rem; }
-.casilla { display: flex; align-items: center; gap: 0.6rem; padding: 0.35rem 0.25rem; color: var(--crema); font-size: 0.95rem; margin: 0; cursor: pointer; }
+
+.fila-clicable { cursor: pointer; border-radius: 8px; transition: background 0.12s; }
+.fila-clicable:hover { background: rgba(245, 240, 232, 0.05); }
+
+.lista-casillas { max-height: 240px; overflow-y: auto; border: 1px solid var(--borde-fuerte); border-radius: 10px; padding: 0.5rem; margin-top: 0.5rem; }
+.casilla { display: flex; align-items: center; gap: 0.6rem; padding: 0.4rem 0.3rem; color: var(--crema); font-size: 0.92rem; margin: 0; cursor: pointer; border-radius: 6px; }
+.casilla:hover { background: rgba(245, 240, 232, 0.04); }
 .casilla input { width: auto; }
-.aviso-cuota { border-color: var(--dorado); background: rgba(201, 168, 76, 0.1); }
+
+.aviso-cuota {
+  border-color: var(--dorado);
+  background: var(--trama), linear-gradient(135deg, rgba(201, 168, 76, 0.14), rgba(201, 168, 76, 0.05));
+}
 .tarjeta a { color: var(--crema); text-decoration: none; }
 .tarjeta a:hover { color: var(--dorado); }

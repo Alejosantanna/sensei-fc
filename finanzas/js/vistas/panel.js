@@ -80,8 +80,8 @@ export default async function dibujar(contenedor) {
 
   contenedor.append(elemento('div', { clase: 'rejilla' }, [
     tarjetaNumero('Caja del club', formatearMoneda(caja), caja < 0 ? 'debe' : 'al-dia'),
-    tarjetaNumero('Deben los jugadores', formatearMoneda(deudaJugadores), 'debe'),
-    tarjetaNumero('Falta de sponsors', formatearMoneda(pendienteSponsors), 'debe'),
+    tarjetaNumero('Deben los jugadores', formatearMoneda(deudaJugadores), deudaJugadores > 0 ? 'debe' : 'al-dia'),
+    tarjetaNumero('Falta de sponsors', formatearMoneda(pendienteSponsors), pendienteSponsors > 0 ? 'debe' : 'al-dia'),
     tarjetaNumero('Gastos del mes', formatearMoneda(gastosDelMes)),
   ]));
 

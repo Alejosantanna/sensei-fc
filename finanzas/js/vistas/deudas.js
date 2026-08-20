@@ -115,7 +115,7 @@ export default async function dibujar(contenedor) {
   selector.value = concepto;
 
   const lista = elemento('div', { clase: 'tarjeta' });
-  const total = elemento('p', { clase: 'numero-grande debe' });
+  const total = elemento('p', { clase: 'numero-grande' });
   const acciones = elemento('div', { clase: 'fila-botones' });
 
   function deudoresVisibles() {
@@ -132,7 +132,10 @@ export default async function dibujar(contenedor) {
 
   function pintar() {
     const deudores = deudoresVisibles();
-    total.textContent = formatearMoneda(deudores.reduce((s, d) => s + d.pendiente, 0));
+    const suma = deudores.reduce((s, d) => s + d.pendiente, 0);
+    total.textContent = formatearMoneda(suma);
+    // Rojo solo si de verdad hay algo por cobrar: en cero no es una alarma.
+    total.className = suma > 0 ? 'numero-grande debe' : 'numero-grande al-dia';
 
     lista.replaceChildren();
     if (deudores.length === 0) {

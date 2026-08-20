@@ -135,7 +135,10 @@ export default async function dibujar(contenedor) {
   const totalPendiente = sponsors.reduce((s, x) => s + Math.max(x.pendiente, 0), 0);
   contenedor.append(elemento('div', { clase: 'tarjeta' }, [
     elemento('p', { clase: 'tenue', texto: 'Falta cobrar de sponsors' }),
-    elemento('p', { clase: 'numero-grande debe', texto: formatearMoneda(totalPendiente) }),
+    elemento('p', {
+      clase: `numero-grande ${totalPendiente > 0 ? 'debe' : 'al-dia'}`,
+      texto: formatearMoneda(totalPendiente),
+    }),
   ]));
 
   if (sponsors.length === 0) {
