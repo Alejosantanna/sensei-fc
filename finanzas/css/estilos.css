@@ -12,6 +12,10 @@
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
+/* Cualquier regla de display con selector de id le gana a la regla [hidden]
+   del navegador. Sin esto, ocultar algo desde JavaScript no surte efecto. */
+[hidden] { display: none !important; }
+
 body {
   background: var(--negro);
   color: var(--crema);
@@ -109,19 +113,33 @@ input:focus, select:focus, textarea:focus { outline: 2px solid var(--verde); bor
 
 /* ─── Escritorio ─── */
 @media (min-width: 820px) {
-  #app { display: grid; grid-template-columns: 200px 1fr; grid-template-rows: auto 1fr; min-height: 100vh; }
-  #cabecera { grid-column: 1 / -1; }
+  /* Areas con nombre: la ubicacion no depende del orden del HTML. */
+  #app {
+    display: grid;
+    grid-template-columns: 220px minmax(0, 1fr);
+    grid-template-rows: auto 1fr;
+    grid-template-areas:
+      "cabecera cabecera"
+      "nav      vista";
+    min-height: 100vh;
+  }
+  #cabecera   { grid-area: cabecera; }
+  #navegacion { grid-area: nav; }
+  #vista      { grid-area: vista; }
+
   #navegacion {
-    position: sticky;
-    top: 57px;
-    align-self: start;
+    position: static;      /* deja de ser fija: ahora es una columna mas */
+    inset: auto;           /* limpia el bottom/left/right de la version movil */
     flex-direction: column;
+    align-content: start;
     border-top: none;
     border-right: 1px solid var(--borde);
-    height: calc(100vh - 57px);
+    padding-top: 0.5rem;
   }
-  #navegacion a { text-align: left; padding: 0.8rem 1.25rem; font-size: 0.9rem; }
+  /* Sin esto cada enlace se estira a 1/6 del alto de la pantalla. */
+  #navegacion a { flex: 0 0 auto; text-align: left; padding: 0.8rem 1.25rem; font-size: 0.9rem; }
   #navegacion a.activa { box-shadow: inset 3px 0 0 var(--dorado); }
+
   #vista { padding: 1.5rem; padding-bottom: 1.5rem; }
 }
 
