@@ -89,7 +89,7 @@ create table if not exists config (
 );
 
 insert into config (clave, valor) values
-  ('cuota_monto', '500'),
+  ('cuota_monto', '0'),
   ('temporada', '2026')
 on conflict (clave) do nothing;
 
