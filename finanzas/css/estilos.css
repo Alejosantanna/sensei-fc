@@ -191,3 +191,6 @@ input:focus, select:focus, textarea:focus { outline: 2px solid var(--verde); bor
 .lista-casillas { max-height: 240px; overflow-y: auto; border: 1px solid var(--borde); border-radius: 8px; padding: 0.5rem; margin-top: 0.5rem; }
 .casilla { display: flex; align-items: center; gap: 0.6rem; padding: 0.35rem 0.25rem; color: var(--crema); font-size: 0.95rem; margin: 0; cursor: pointer; }
 .casilla input { width: auto; }
+.aviso-cuota { border-color: var(--dorado); background: rgba(201, 168, 76, 0.1); }
+.tarjeta a { color: var(--crema); text-decoration: none; }
+.tarjeta a:hover { color: var(--dorado); }
