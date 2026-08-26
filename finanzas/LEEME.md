@@ -50,7 +50,22 @@ usuarios creados.
 
     git push
 
-El sitio queda en https://alejosantanna.github.io/sensei-fc/finanzas/
+El panel queda en **https://sensei-fc-three.vercel.app/finanzas/**
+
+Ese es el link que se comparte con la dirigencia. Las direcciones que
+Vercel muestra con un codigo en el medio (por ejemplo
+sensei-eco5kkblx-sensei16.vercel.app) son de un despliegue puntual,
+piden iniciar sesion en Vercel y no sirven para compartir.
+
+### Importante: el repositorio tiene que ser publico
+
+En el plan gratuito de Vercel, un repositorio privado **bloquea todos
+los despliegues**, sin importar quien haya firmado el commit. Si en
+Deployments aparece "Blocked", revisar que el repo siga en publico.
+
+Que sea publico no expone la plata del club: sin iniciar sesion no se
+lee ni se escribe nada. Esta verificado contra la base real — la
+lectura anonima devuelve vacio y la escritura anonima da error 401.
 
 ## Uso diario
 
