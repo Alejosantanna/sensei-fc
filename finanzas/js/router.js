@@ -6,6 +6,7 @@ const VISTAS = {
   deudas: () => import('./vistas/deudas.js'),
   sponsors: () => import('./vistas/sponsors.js'),
   gastos: () => import('./vistas/gastos.js'),
+  tareas: () => import('./vistas/tareas.js'),
   ajustes: () => import('./vistas/ajustes.js'),
   jugador: () => import('./vistas/jugador.js'),
 };

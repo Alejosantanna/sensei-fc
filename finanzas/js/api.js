@@ -148,6 +148,43 @@ export async function crearSponsor({ nombre, contacto, instagram, montoCompromet
   );
 }
 
+export async function actualizarSponsor(id, { nombre, contacto, instagram, montoComprometido, temporada }) {
+  revisar(
+    await supabase
+      .from('sponsors')
+      .update({
+        nombre,
+        contacto: contacto || null,
+        instagram: instagram || null,
+        monto_comprometido: montoComprometido,
+        temporada: temporada || null,
+      })
+      .eq('id', id),
+    'guardar el sponsor',
+  );
+}
+
+export async function cambiarEstadoSponsor(id, activo) {
+  revisar(await supabase.from('sponsors').update({ activo }).eq('id', id), 'cambiar el estado del sponsor');
+}
+
+// Solo se puede borrar un sponsor sin pagos: la vista se encarga de
+// ofrecerlo unicamente en ese caso, asi nadie choca contra la clave foranea.
+export async function borrarSponsor(id) {
+  revisar(await supabase.from('sponsors').delete().eq('id', id), 'borrar el sponsor');
+}
+
+export async function actualizarSponsorPago(id, { monto, fecha, nota }) {
+  revisar(
+    await supabase.from('sponsor_pagos').update({ monto, fecha, nota: nota || null }).eq('id', id),
+    'guardar el pago del sponsor',
+  );
+}
+
+export async function borrarSponsorPago(id) {
+  revisar(await supabase.from('sponsor_pagos').delete().eq('id', id), 'borrar el pago del sponsor');
+}
+
 export async function listarSponsorPagos(sponsorId) {
   return revisar(
     await supabase.from('sponsor_pagos').select('*').eq('sponsor_id', sponsorId).order('fecha'),
@@ -221,6 +258,35 @@ export async function actualizarIngreso(id, { fecha, categoria, descripcion, mon
 
 export async function borrarIngreso(id) {
   revisar(await supabase.from('ingresos').delete().eq('id', id), 'borrar el ingreso');
+}
+
+// ─── Tareas pendientes ───
+
+export async function listarTareas() {
+  return revisar(
+    await supabase.from('tareas').select('*').order('vence', { nullsFirst: false }),
+    'cargar las tareas',
+  );
+}
+
+export async function crearTarea({ texto, vence, repite, nota }) {
+  revisar(
+    await supabase.from('tareas').insert({
+      texto,
+      vence: vence || null,
+      repite: repite || 'ninguna',
+      nota: nota || null,
+    }),
+    'guardar la tarea',
+  );
+}
+
+export async function actualizarTarea(id, cambios) {
+  revisar(await supabase.from('tareas').update(cambios).eq('id', id), 'guardar la tarea');
+}
+
+export async function borrarTarea(id) {
+  revisar(await supabase.from('tareas').delete().eq('id', id), 'borrar la tarea');
 }
 
 // ─── Ajustes ───

@@ -96,6 +96,20 @@ create table if not exists ingresos (
   creado_por   uuid references auth.users(id)
 );
 
+-- Pendientes del club: publicar historias, pagar el partido de la liga.
+-- Las que se repiten no se marcan hechas: se les corre la fecha.
+create table if not exists tareas (
+  id          uuid primary key default gen_random_uuid(),
+  texto       text not null,
+  hecha       boolean not null default false,
+  vence       date,
+  repite      text not null default 'ninguna'
+                check (repite in ('ninguna','semanal','mensual')),
+  nota        text,
+  creado_en   timestamptz not null default now(),
+  creado_por  uuid references auth.users(id)
+);
+
 create table if not exists config (
   clave          text primary key,
   valor          text not null,
@@ -142,6 +156,7 @@ alter table sponsors      enable row level security;
 alter table sponsor_pagos enable row level security;
 alter table gastos        enable row level security;
 alter table ingresos      enable row level security;
+alter table tareas        enable row level security;
 alter table config        enable row level security;
 
 drop policy if exists dirigencia on jugadores;
@@ -170,6 +185,10 @@ create policy dirigencia on gastos
 
 drop policy if exists dirigencia on ingresos;
 create policy dirigencia on ingresos
+  for all to authenticated using (true) with check (true);
+
+drop policy if exists dirigencia on tareas;
+create policy dirigencia on tareas
   for all to authenticated using (true) with check (true);
 
 drop policy if exists dirigencia on config;

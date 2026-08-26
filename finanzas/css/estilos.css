@@ -308,3 +308,31 @@ form .boton-principal { margin-top: 1.4rem; width: 100%; padding: 0.85rem; font-
 }
 .pestana:hover { color: var(--crema); }
 .pestana.activa { color: var(--dorado); border-bottom-color: var(--dorado); }
+
+/* ─── Tareas ─── */
+#cabecera .boton-texto { text-decoration: none; }
+.casilla-tarea {
+  flex: 0 0 auto;
+  width: 24px; height: 24px;
+  border: 2px solid var(--borde-fuerte);
+  border-radius: 7px;
+  background: none;
+  color: var(--crema);
+  font-size: 0.85rem; line-height: 1;
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s;
+}
+.casilla-tarea:hover { border-color: var(--dorado); }
+.casilla-tarea.marcada { background: var(--verde); border-color: var(--verde); }
+.texto-tarea { display: block; }
+.tarea-hecha .texto-tarea { text-decoration: line-through; color: var(--tenue); }
+
+.chip {
+  flex: 0 0 auto;
+  font-size: 0.68rem; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.06em;
+  padding: 0.22rem 0.55rem; border-radius: 999px;
+  white-space: nowrap;
+}
+.chip-vencida { background: rgba(232, 145, 143, 0.16); color: var(--rojo); }
+.chip-hoy { background: rgba(201, 168, 76, 0.16); color: var(--dorado); }
